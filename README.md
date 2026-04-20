@@ -1,15 +1,10 @@
-<img src="https://cdn.prod.website-files.com/677c400686e724409a5a7409/6790ad949cf622dc8dcd9fe4_nextwork-logo-leather.svg" alt="NextWork" width="300" />
-
 # Cloud Security with AWS IAM
 
 **Project Link:** [View Project](http://learn.nextwork.org/projects/aws-security-iam)
 
-**Author:** sigferodrigues@gmail.com  
-**Email:** sigferodrigues@gmail.com
-
 ---
 
-![Image](http://learn.nextwork.org/triumphant_magenta_zany_bilberry/uploads/aws-security-iam_1c864649)
+![Image](https://github.com/sigrid-fr/aws-iam-least-privilege-ec2/blob/main/cover.png)
 
 ---
 
@@ -169,7 +164,5 @@ After refining the simulation to target development resources with the correct p
 The delete tags action remained denied, as it requires a separate policy, reinforcing proper permission boundaries and least privilege principles.
 
 ![Image](http://learn.nextwork.org/triumphant_magenta_zany_bilberry/uploads/aws-security-iam_069d8a621)
-
----
 
 ---
