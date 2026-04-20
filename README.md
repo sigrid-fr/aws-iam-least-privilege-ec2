@@ -1,6 +1,6 @@
-# Cloud Security with AWS IAM
+# AWS IAM Least Privilege for EC2
 
-This project demonstrates how to enforce least privilege access in AWS by restricting EC2 actions based on environment tags and validating permissions through simulation and real testing.
+This project demonstrates how to enforce least privilege access control in AWS using IAM, restricting EC2 actions based on environment tags and validating permissions through simulation and real testing.
 
 **Project Link:** [View Project](http://learn.nextwork.org/projects/aws-security-iam)
 
@@ -10,83 +10,127 @@ This project demonstrates how to enforce least privilege access in AWS by restri
 
 ---
 
-## Introducing Today's Project!
+## Context
 
-### Project overview
+In cloud environments, multiple users need access to infrastructure resources. However, unrestricted access can lead to accidental or unauthorized actions, especially in production environments.
 
-This project demonstrates the implementation of least privilege access control in AWS using IAM, with a focus on policy validation and secure, controlled access to EC2 resources.
+## Problem
 
-### Tools and concepts
+Developers require access to EC2 instances for daily operations, but:
 
-In this project, I worked with AWS IAM for identity and access management, Amazon EC2 for compute provisioning, and the IAM Policy Simulator to validate permissions. I also applied key security concepts such as least privilege, role-based access control (RBAC), and environment-based access control using resource tags.
+- Unrestricted permissions can allow actions on production resources
+- Users may accidentally stop or modify critical instances
+- Tag manipulation can lead to privilege escalation
 
-### Project reflection
+## Solution
 
-This project took a few hours to complete, including configuring IAM policies, setting up EC2 instances, and validating permissions using the IAM Policy Simulator.
+To address this, I implemented an IAM-based access control strategy:
+
+- Created IAM users and groups for controlled access
+- Applied a custom IAM policy based on resource tags (Env)
+- Allowed EC2 actions only for development resources
+- Denied tag modification actions to prevent privilege escalation
+- Enabled read-only visibility across all environments
+
+## Validation
+
+The solution was validated using:
+
+- IAM Policy Simulator
+- Manual testing with IAM user
+
+### Expected behavior
+
+- Development instance → Allowed
+- Production instance → Denied
+- Tag modification → Denied
+
+## DevSecOps Relevance
+
+This project aligns with DevSecOps practices by:
+
+- Enforcing least privilege access
+- Applying security controls at the infrastructure level
+- Validating permissions before execution
+- Preventing privilege escalation through policy design
+
+## Key Concepts Learned
+
+- AWS IAM (users, groups, policies)
+- Amazon EC2
+- IAM Policy Simulator
+- Least Privilege Principle
+- Role-Based Access Control (RBAC)
+- Resource tagging for environment isolation
+
+## Result
+
+The implementation successfully:
+
+- Restricted access to development resources only
+- Prevented unauthorized actions in production
+- Ensured secure and controlled access to cloud infrastructure
 
 ---
 
 ## Tags
 
-### What I did in this step
-
-Launch two Amazon EC2 instances to provision compute capacity for the application environment.
-
-### Understanding tags
-
-Tags are key-value pairs assigned to AWS resources that enable efficient organization, filtering, and management across environments.
-
 ### My tag configuration
 
 I used the Env tag on my EC2 instances, assigning values such as "development" and "production" to distinguish environments.
 
-![Image](http://learn.nextwork.org/triumphant_magenta_zany_bilberry/uploads/aws-security-iam_2e0e5a5d)
+![Image](https://github.com/sigrid-fr/aws-iam-least-privilege-ec2/blob/main/tag.png)
 
 ---
 
 ## IAM Policies
 
-### What I did in this step
-
-In this step, I create an IAM policy to define controlled access to the development environment, following the principle of least privilege.
-
-### Understanding IAM policies
-
-IAM Policies are rules for who can do what with AWS resources. It's all about giving permissions to IAM users, groups, or roles, saying what they can or can't do on certain resources, and when those rules kick in.
-
-### The policy I set up
-
-For this project, I’ve set up a policy using JSON editor.
-
 ### Policy effect
 
-I’ve created a policy that allows the user to perform all EC2 actions only on resources tagged as Env=development, while still allowing read-only access (Describe) to all EC2 resources. It also explicitly denies creating or deleting tags, preventing the user from changing tags to gain unauthorized access.
-
-### Understanding Effect, Action, and Resource
-
-The Effect, Action, and Resource attributes of a JSON policy means allow/deny, what can be done, and where it applies, respectively.
+I've created a policy that allows the user to perform all EC2 actions only on resources tagged as Env=development, while still allowing read-only access (Describe) to all EC2 resources. It also explicitly denies creating or deleting tags, preventing the user from changing tags to gain unauthorized access.
 
 ---
 
 ## My JSON Policy
 
-![Image](http://learn.nextwork.org/triumphant_magenta_zany_bilberry/uploads/aws-security-iam_1c864649)
+```json
+{    
+  "Version": "2012-10-17",    
+  "Statement": [        
+    {            
+      "Effect": "Allow",            
+      "Action": "ec2:*",            
+      "Resource": "*",            
+      "Condition": {                
+        "StringEquals": {                    
+          "ec2:ResourceTag/Env": "development"                
+        }            
+      }        
+    },        
+    {            
+      "Effect": "Allow",            
+      "Action": "ec2:Describe*",            
+      "Resource": "*"        
+    },        
+    {            
+      "Effect": "Deny",            
+      "Action": [                
+        "ec2:DeleteTags",                
+        "ec2:CreateTags"            
+      ],            
+      "Resource": "*"        
+    }    
+  ] 
+}
+```
 
 ---
 
 ## Account Alias
 
-### What I did in this step
-
-In this step, I configure an AWS account alias to provide a more user-friendly and simplified sign-in experience.
-
-### Understanding account aliases
-
 An account alias is a friendly name for your AWS account that you can use instead of your account ID to sign in to the AWS Management Console.
 
-### Setting up my account alias
-
-Now, my new AWS console sign-in URL is https://nextwork-alias-sigrid.signin.aws.amazon.com/console
+### Setting up an account alias
 
 ![Image](http://learn.nextwork.org/triumphant_magenta_zany_bilberry/uploads/aws-security-iam_0eb4439b)
 
@@ -94,32 +138,7 @@ Now, my new AWS console sign-in URL is https://nextwork-alias-sigrid.signin.aws.
 
 ## IAM Users and User Groups
 
-### What I did in this step
-
-In this step, I create a dedicated IAM group for all NextWork interns to enable centralized and consistent permission management.
-
-### Understanding user groups
-
-IAM user groups are collections of IAM users that simplify permission management.
-By attaching policies to a group instead of individual users, permissions can be managed centrally and consistently across all members.
-
-### Attaching policies to user groups
-
-In this case, I attached the custom policy to the user group, ensuring that all users inherit the same access permissions.
-
-### Understanding IAM users
-
-IAM users are individual identities with defined permissions to access AWS resources, whereas user groups are collections of users that allow centralized and consistent permission management.
-
----
-
 ## Logging in as an IAM User
-
-### Sharing sign-in details
-
-There are two ways to share a new user's login details: by providing the console sign-in URL and credentials, or by downloading and securely sharing the credentials file (.csv).
-
-### Observations from the IAM user dashboard
 
 I created an IAM user with access limited to the development environment. After logging in as this user, several dashboard panels displayed "Access Denied", confirming that the policy correctly restricts access to certain features and prevents interaction with production resources.
 
@@ -128,14 +147,6 @@ I created an IAM user with access limited to the development environment. After 
 ---
 
 ## Testing IAM Policies
-
-### What I did in this step
-
-In this step, I verify that the user has the correct access to the development instance.
-
-### Testing policy actions
-
-I validated the IAM JSON policy by simulating the "StopInstances" action on EC2 instances in different environments. Access was correctly denied for the production instance and allowed for the development instance, demonstrating proper enforcement of least privilege.
 
 ### Stopping the production instance
 
@@ -153,22 +164,10 @@ When simulating the "StopInstances" action on the development instance, the resu
 
 ## IAM Policy Simulator
 
-To extend this project, I leverage the IAM Policy Simulator to efficiently validate user permissions and ensure correct access control.
-
-### Understanding the IAM Policy Simulator
-
-The IAM Policy Simulator is a feature of AWS Identity and Access Management (IAM) that enables safe validation of permissions by simulating actions without affecting real resources. It is essential for verifying policy behavior, enforcing least privilege, and preventing misconfigurations in cloud environments.
-
-### How I used the simulator
-
 I used the IAM Policy Simulator to validate permissions for deleting tags and terminating EC2 instances. Both actions were initially denied.
 After refining the simulation to target development resources with the correct permissions, instance termination was successfully allowed.
 The delete tags action remained denied, as it requires a separate policy, reinforcing proper permission boundaries and least privilege principles.
 
 ![Image](http://learn.nextwork.org/triumphant_magenta_zany_bilberry/uploads/aws-security-iam_069d8a621)
-
-### DevSecOps Relevance
-
-This project applies security controls at the infrastructure level, validates permissions before execution, and enforces least privilege, aligning with DevSecOps practices.
 
 ---
