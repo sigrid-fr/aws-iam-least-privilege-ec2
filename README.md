@@ -66,7 +66,7 @@ The implementation successfully:
 
 ## Tags
 
-### My tag configuration
+### Tag Configuration
 
 I used the Env tag on my EC2 instances, assigning values such as "development" and "production" to distinguish environments.
 
