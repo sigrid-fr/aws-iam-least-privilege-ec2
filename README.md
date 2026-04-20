@@ -6,7 +6,7 @@ This project demonstrates how to enforce least privilege access control in AWS u
 
 ---
 
-![Image](https://github.com/sigrid-fr/aws-iam-least-privilege-ec2/blob/main/cover.png)
+![Image](https://github.com/sigrid-fr/aws-iam-least-privilege-ec2/blob/main/top.png)
 
 ---
 
