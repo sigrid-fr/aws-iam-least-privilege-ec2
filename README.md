@@ -82,7 +82,7 @@ I've created a policy that allows the user to perform all EC2 actions only on re
 
 ---
 
-## My JSON Policy
+### JSON Policy
 
 ```json
 {    
