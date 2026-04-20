@@ -1,5 +1,7 @@
 # Cloud Security with AWS IAM
 
+This project demonstrates how to enforce least privilege access in AWS by restricting EC2 actions based on environment tags and validating permissions through simulation and real testing.
+
 **Project Link:** [View Project](http://learn.nextwork.org/projects/aws-security-iam)
 
 ---
@@ -164,5 +166,9 @@ After refining the simulation to target development resources with the correct p
 The delete tags action remained denied, as it requires a separate policy, reinforcing proper permission boundaries and least privilege principles.
 
 ![Image](http://learn.nextwork.org/triumphant_magenta_zany_bilberry/uploads/aws-security-iam_069d8a621)
+
+### DevSecOps Relevance
+
+This project applies security controls at the infrastructure level, validates permissions before execution, and enforces least privilege, aligning with DevSecOps practices.
 
 ---
