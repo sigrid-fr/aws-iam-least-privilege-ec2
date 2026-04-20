@@ -45,15 +45,6 @@ The solution was validated using:
 - Production instance → Denied
 - Tag modification → Denied
 
-## DevSecOps Relevance
-
-This project aligns with DevSecOps practices by:
-
-- Enforcing least privilege access
-- Applying security controls at the infrastructure level
-- Validating permissions before execution
-- Preventing privilege escalation through policy design
-
 ## Key Concepts Learned
 
 - AWS IAM (users, groups, policies)
