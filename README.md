@@ -130,8 +130,6 @@ I've created a policy that allows the user to perform all EC2 actions only on re
 
 An account alias is a friendly name for your AWS account that you can use instead of your account ID to sign in to the AWS Management Console.
 
-### Setting up an account alias
-
 ![Image](http://learn.nextwork.org/triumphant_magenta_zany_bilberry/uploads/aws-security-iam_0eb4439b)
 
 ---
