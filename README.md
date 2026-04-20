@@ -80,7 +80,7 @@ I used the Env tag on my EC2 instances, assigning values such as "development" a
 
 I've created a policy that allows the user to perform all EC2 actions only on resources tagged as Env=development, while still allowing read-only access (Describe) to all EC2 resources. It also explicitly denies creating or deleting tags, preventing the user from changing tags to gain unauthorized access.
 
-### JSON Policy
+### Json Policy
 
 ```json
 {    
